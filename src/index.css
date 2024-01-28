@@ -1,0 +1,26 @@
+#root {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.InfoBox {
+    text-align: center;
+}
+
+.cardContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.Input {
+    text-align: center;
+    padding-top: 3vh;
+    display: flex;
+    justify-content: center;
+}
