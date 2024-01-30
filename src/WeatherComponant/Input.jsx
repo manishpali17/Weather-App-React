@@ -10,8 +10,8 @@ Input.propTypes = {
 };
 
 const appid = import.meta.env.VITE_APP_ID;
+const url = import.meta.env.VITE_API_URL;
 const units = "metric";
-const API_BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 const DEFAULT_CITY = "delhi";
 
 async function getLocation() {
@@ -20,7 +20,7 @@ async function getLocation() {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
     const { latitude, longitude } = position.coords;
-    const url = `${API_BASE_URL}?lat=${latitude}&lon=${longitude}&appid=${appid}&units=${units}`;
+    const url = `${url}?lat=${latitude}&lon=${longitude}&appid=${appid}&units=${units}`;
     return url;
   } catch (error) {
     console.error("Error getting location:", error);
@@ -37,7 +37,7 @@ export default function Input({ handleWeatherInfo }) {
       .then((url) => weatherApi(url))
       .catch(() =>
         weatherApi(
-          `${API_BASE_URL}?q=${DEFAULT_CITY}&appid=${appid}&units=${units}`
+          `${url}?q=${DEFAULT_CITY}&appid=${appid}&units=${units}`
         )
       );
   }, []);
@@ -71,7 +71,7 @@ export default function Input({ handleWeatherInfo }) {
   //did't use useffect because openwether api limit
   const onSubmit = (e) => {
     e.preventDefault();
-    weatherApi(`${API_BASE_URL}?q=${city}&appid=${appid}&units=${units}`);
+    weatherApi(`${url}?q=${city}&appid=${appid}&units=${units}`);
     setCity("");
     setError("");
   };
