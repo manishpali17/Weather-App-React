@@ -20,8 +20,8 @@ async function getLocation() {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
     const { latitude, longitude } = position.coords;
-    const url = `${url}?lat=${latitude}&lon=${longitude}&appid=${appid}&units=${units}`;
-    return url;
+    const positionUrl = `${url}?lat=${latitude}&lon=${longitude}&appid=${appid}&units=${units}`;
+    return positionUrl;
   } catch (error) {
     console.error("Error getting location:", error);
     throw new Error("Unable to get your location");
