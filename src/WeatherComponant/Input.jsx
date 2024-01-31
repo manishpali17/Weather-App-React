@@ -31,19 +31,19 @@ async function getLocation() {
 export default function Input({ handleWeatherInfo }) {
   const [error, setError] = useState("");
   const [city, setCity] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getLocation()
       .then((url) => weatherApi(url))
       .catch(() =>
-        weatherApi(
-          `${url}?q=${DEFAULT_CITY}&appid=${appid}&units=${units}`
-        )
+        weatherApi(`${url}?q=${DEFAULT_CITY}&appid=${appid}&units=${units}`)
       );
   }, []);
 
   async function weatherApi(url) {
     try {
+      setLoading(true);
       const res = await fetch(url);
       const jsonRes = await res.json();
       const result = {
@@ -64,11 +64,12 @@ export default function Input({ handleWeatherInfo }) {
       }
     } catch (e) {
       handleWeatherInfo({});
-      setError("error while fetching data form api");
+      setError("Error fetching data from the API");
+    } finally {
+      setLoading(false);
     }
   }
 
-  //did't use useffect because openwether api limit
   const onSubmit = (e) => {
     e.preventDefault();
     weatherApi(`${url}?q=${city}&appid=${appid}&units=${units}`);
@@ -79,14 +80,9 @@ export default function Input({ handleWeatherInfo }) {
   return (
     <div className="Input">
       <form onSubmit={onSubmit}>
+        {loading && <p>Loading...</p>}
         {error && (
-          <Alert
-            variant="filled"
-            onClose={() => {
-              setError("");
-            }}
-            severity="error"
-          >
+          <Alert variant="filled" onClose={() => setError("")} severity="error">
             <AlertTitle>Error</AlertTitle>
             {error}
           </Alert>
@@ -100,7 +96,7 @@ export default function Input({ handleWeatherInfo }) {
           size="large"
           margin="normal"
           sx={{ bgcolor: "background.paper" }}
-        />{" "}
+        />
         <br />
         <br />
         <Button type="submit" variant="contained" endIcon={<SendIcon />}>
